@@ -27,3 +27,4 @@ motorRight = Motor(Port.A)
 # motorRight.run_target(500,-90)
 motorLeft.run_time(speed=500,time=1000)
 motorRight.run_time(speed=-500,time=1000)
+# PUSH TEST
