@@ -52,9 +52,18 @@ class PrintingRobot():
 
         self.stopRight = TouchSensor(Port.S1)
         self.stopLeft = TouchSensor(Port.S4)
-    
+
+
     def reset_motor_position(self):
     # This funtion moves the arms of the robot to the initial position
+        # reset little motor:
+        # self.motorUpDown.rotate_forever(speed=-50, regulate='off')
+        # time.sleep(0.5)
+        # while(abs(self.motorUpDown.speed) > 5):
+        #     time.sleep(0.001)
+        # self.motorUpDown.stop()
+
+        # reset two big motors:
         while True:
             self.motorLeft.run_time(speed=-configuration.returnHomeSpeed,time=configuration.returnHomeTime)
             if self.stopLeft.pressed():
@@ -73,16 +82,37 @@ class PrintingRobot():
             self.motorRight.run_time(speed=right_pos[0],time=right_pos[1]) 
 
     def move_forward_naive(self):
-        self.motorLeft.run_time(speed=500,time=1000)
-        self.motorRight.run_time(speed=-500,time=1000) 
+        self.motorLeft.run_time(speed=500,time=2000)
+        self.motorRight.run_time(speed=-500,time=2000) 
+
+    def move_two_motors(self):
+        roboticValue = DriveBase(left_motor=self.motorLeft, right_motor=self.motorRight, wheel_diameter=1,axle_track=110)
+        roboticValue.straight(5)
+        roboticValue.turn(5)
+        roboticValue.straight(5)
+        roboticValue.stop()
+        roboticValue.reset()
+
+    def run_by_command():
+        print("Enter Angle:")
+        angle=int(input())
+        print("Enter Time:")
+        time=int(input())
+
 
 
 if __name__ == "__main__":
     print("main")
     myRobot = PrintingRobot()
+    myRobot.reset_motor_position()  # reset position
     myRobot.move_forward_naive()
-    arrLeft = [[configuration.movingSpeed, configuration.runTime], [200, 1000]]
-    arrRight = [[-configuration.movingSpeed, configuration.runTime], [500, 2000]]
-    myRobot.run_to_postion(arrLeft[0], arrRight[0])
+    myRobot.move_two_motors()
+    #####
+    # arrLeft = [[configuration.movingSpeed, configuration.runTime], [200, 1000]]
+    # arrRight = [[-configuration.movingSpeed, configuration.runTime], [500, 2000]]
+    # for obj in arrLeft:
+    #     myRobot.run_to_postion(arrLeft[obj], arrRight[obj])
+    
+    #####
     myRobot.reset_motor_position()
 
