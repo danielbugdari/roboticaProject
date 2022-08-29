@@ -9,41 +9,22 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 
 import time
 import configuration
+
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
 
 
-def run_to_postion(left_pos, right_pos):
-    if not stopLeft.pressed() or not stopRight.pressed():
-        motorUpDown.run_time(speed=-700,time=300)
-        motorLeft.run_time(speed=left_pos[0],time=left_pos[1])
-        motorRight.run_time(speed=right_pos[0],time=right_pos[1]) 
 
 
-# Create your objects here.
-ev3 = EV3Brick()
-
-movingSpeed = configuration.movingSpeed
-runTime = configuration.runTime
-# Write your program here.
-# ev3.speaker.beep()
-# motorLeft = ev3.OUTPUT_C #mymotor(OUTPUT_C)
-# motorLeft.run(5)
-motorLeft = Motor(Port.C)
-motorRight = Motor(Port.A)
-motorUpDown = Motor(Port.B)
-
-# stopLeft = TouchSensor(Port.S3)
-# stopRight = TouchSensor(Port.S2)
+# roboticValue = DriveBase(left_motor=motorLeft, right_motor=motorRight, wheel_diameter=1,axle_track=110)
+# roboticValue.turn(-30)
 # motorLeft.run_target(500,90)
 # motorRight.run_target(500,-90)
 
-# motorLeft.run_time(speed=-500,time=500)
-# motorRight.run_time(speed=-500,time=1000)
 
 # motorUpDown.run_time(speed=700,time=300)
-motorLeft.run_time(speed=movingSpeed,time=runTime)
-motorRight.run_time(speed=-movingSpeed,time=runTime)
+# motorLeft.run_time(speed=movingSpeed,time=runTime)
+# motorRight.run_time(speed=-movingSpeed,time=runTime)
 # motorUpDown.run_time(speed=-700,time=300)
 # motorLeft.run_time(speed=500,time=2000)
 # motorRight.run_time(speed=-500,time=1000)
@@ -52,3 +33,56 @@ motorRight.run_time(speed=-movingSpeed,time=runTime)
 # arrRight = [[500, 1000], [500, 2000]]
 
 # run_to_postion(arrLeft[1], arrRight[1])
+
+
+class PrintingRobot():
+    def __init__(self):
+        # Create your objects here.
+        ev3 = EV3Brick()
+
+        movingSpeed = configuration.movingSpeed
+        runTime = configuration.runTime
+
+        # Write your program here.
+        # ev3.speaker.beep()
+
+        self.motorLeft = Motor(Port.C)
+        self.motorRight = Motor(Port.A)
+        self.motorUpDown = Motor(Port.B)
+
+        self.stopRight = TouchSensor(Port.S1)
+        self.stopLeft = TouchSensor(Port.S4)
+    
+    def reset_motor_position(self):
+    # This funtion moves the arms of the robot to the initial position
+        while True:
+            self.motorLeft.run_time(speed=-configuration.returnHomeSpeed,time=configuration.returnHomeTime)
+            if self.stopLeft.pressed():
+                break
+
+        while True:
+            self.motorRight.run_time(speed=configuration.returnHomeSpeed,time=configuration.returnHomeTime)
+            if self.stopRight.pressed():
+                break
+
+    def run_to_postion(self, left_pos, right_pos):
+    # This function 
+        if not self.stopLeft.pressed() or not self.stopRight.pressed():
+            self.motorUpDown.run_time(speed=-700,time=300)
+            self.motorLeft.run_time(speed=left_pos[0],time=left_pos[1])
+            self.motorRight.run_time(speed=right_pos[0],time=right_pos[1]) 
+
+    def move_forward_naive(self):
+        self.motorLeft.run_time(speed=500,time=1000)
+        self.motorRight.run_time(speed=-500,time=1000) 
+
+
+if __name__ == "__main__":
+    print("main")
+    myRobot = PrintingRobot()
+    myRobot.move_forward_naive()
+    arrLeft = [[configuration.movingSpeed, configuration.runTime], [200, 1000]]
+    arrRight = [[-configuration.movingSpeed, configuration.runTime], [500, 2000]]
+    myRobot.run_to_postion(arrLeft[0], arrRight[0])
+    myRobot.reset_motor_position()
+

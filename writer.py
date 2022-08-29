@@ -72,8 +72,8 @@ class Writer():
 
         self.mot_lift = mymotor(OUTPUT_B)
 
-        self.touch_A  = TouchSensor(INPUT_3)
-        self.touch_B  = TouchSensor(INPUT_2)
+        self.touch_A  = TouchSensor(INPUT_4)
+        self.touch_B  = TouchSensor(INPUT_1)
 
         if (calibrate):
             self.calibrate()
