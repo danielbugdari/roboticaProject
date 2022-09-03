@@ -11,42 +11,10 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 import time
 import configuration
 
-# This program requires LEGO EV3 MicroPython v2.0 or higher.
-# Click "Open user guide" on the EV3 extension tab for more information.
-
-
-
-
-# roboticValue = DriveBase(left_motor=motorLeft, right_motor=motorRight, wheel_diameter=1,axle_track=110)
-# roboticValue.turn(-30)
-# motorLeft.run_target(500,90)
-# motorRight.run_target(500,-90)
-
-
-# motorUpDown.run_time(speed=700,time=300)
-# motorLeft.run_time(speed=movingSpeed,time=runTime)
-# motorRight.run_time(speed=-movingSpeed,time=runTime)
-# motorUpDown.run_time(speed=-700,time=300)
-# motorLeft.run_time(speed=500,time=2000)
-# motorRight.run_time(speed=-500,time=1000)
-
-# arrLeft = [[500, 1000], [200, 1000]]
-# arrRight = [[500, 1000], [500, 2000]]
-
-# run_to_postion(arrLeft[1], arrRight[1])
-
-
 class PrintingRobot():
     def __init__(self):
-        # Create your objects here.
         self.ev3 = EV3Brick()
-        
 
-        movingSpeed = configuration.movingSpeed
-        runTime = configuration.runTime
-
-        # Write your program here.
-        # ev3.speaker.beep()
         # self.camera =  I2CDevice(Port.S2, 0x02 >> 1)
         # self.camera.write(0x41, 'B')
         # self.camera =   Ev3devSensor(Port.S3)
@@ -109,101 +77,6 @@ class PrintingRobot():
         roboticValue.straight(5)
         roboticValue.stop()
         roboticValue.reset()
-
-    def test(self):
-        # while True:
-        # roboticValue = DriveBase(left_motor=self.motorLeft, right_motor=self.motorRight, wheel_diameter=1, axle_track=1)
-        # while True:
-        #     roboticValue.turn(5)
-        # speed = 300
-        # self.pen_up()
-        # self.motorLeft.run(speed)
-        # # self.motorRight.run(0.5*speed)
-        # time.sleep(5)
-        # self.motorLeft.stop()
-        # self.motorRight.stop()
-
-        # # self.motorLeft.run(-0.5*speed)
-        # self.motorRight.run(speed)
-        # time.sleep(5)
-        # self.motorLeft.stop()
-        # self.motorRight.stop()
-
-        # self.motorLeft.run(-speed)
-        # # self.motorRight.run(-speed)
-        # time.sleep(5)
-        # self.motorLeft.stop()
-        # self.motorRight.stop()
-
-        # self.motorRight.run(-speed)
-        # time.sleep(5)
-        # self.motorLeft.stop()
-        # self.motorRight.stop()
-        # ---
-        # pass
-        # self.motorLeft.run(100)
-        # currentTime = time.time()*1000.0
-        # factor=1.0
-        # while ((time.time()*1000.0 - currentTime) < 5000 ):
-        #     self.motorRight.run(-100*factor)
-        #     factor+=0.1
-        #     time.sleep(0.2)
-        # self.pen_up()
-        # self.motorLeft.run(500)
-        # self.motorRight.run(-500)
-        # time.sleep(5)
-        # self.motorRight.stop()
-        # self.motorLeft.stop()
-        # self.pen_down()
-        
-        # # Rectangle:
-        while True:
-            ##
-            self.motorLeft.run(-500)
-            # self.motorRight.run(+100)
-            time.sleep(3)
-            self.motorLeft.stop()
-
-            # self.motorLeft.run(-300)
-            self.motorRight.run(500)
-            self.motorLeft.run(-200)
-            time.sleep(3)
-            self.motorRight.stop()
-            self.motorLeft.stop()
-
-            self.motorLeft.run(+500)
-            # self.motorRight.run(-100)
-            time.sleep(3)
-            self.motorLeft.stop()
-
-            # self.motorLeft.run(+300)
-            self.motorRight.run(-500)
-            self.motorLeft.run(+200)
-            time.sleep(3)
-            self.motorRight.stop()
-            self.motorLeft.stop()
-            ##
-        # self.motorRight.run(-500)
-        ############# Test boundries #############
-        # self.motorLeft.run(+500)
-        # time.sleep(8)
-        # self.motorLeft.stop()
-
-        # self.motorRight.run(-500)
-        # time.sleep(8)
-        # self.motorRight.stop()
-
-        # self.motorLeft.run(-500)
-        # time.sleep(8)
-        # self.motorLeft.stop()
-
-        # self.motorRight.run(+500)
-        # time.sleep(8)
-        # self.motorRight.stop()
-
-        # self.motorRight.stop()
-        # self.motorLeft.stop()
-        # self.pen_up()
         
         
     # def camera1(self):
@@ -307,15 +180,14 @@ if __name__ == "__main__":
     print("main")
     myRobot = PrintingRobot()  # init robot class
     myRobot.ev3.speaker.say('Started Printing Robot Program')
-    # myRobot.reset_motor_position()  # reset position
+    myRobot.reset_motor_position()  # reset position
 
     # myRobot.move_two_motors()
     # myRobot.camera1()
-    # myRobot.test()
     # myRobot.print(configuration.print_shapes['Triangle'])
     # myRobot.reset_motor_position()  # reset position
-    myRobot.clicks_controller()
-    # myRobot.print(configuration.print_shapes['Rectangle'])
+    # myRobot.clicks_controller()
+    myRobot.print(configuration.print_shapes['House'])
     #####
     # arrLeft = [[configuration.movingSpeed, configuration.runTime], [200, 1000]]
     # arrRight = [[-configuration.movingSpeed, configuration.runTime], [500, 2000]]
@@ -325,4 +197,5 @@ if __name__ == "__main__":
     #####
     myRobot.reset_motor_position()
     myRobot.ev3.speaker.say('Finished Printing Robot Program')
+    myRobot.ev3.speaker.say('Sapir Daniel and Dan Made me')
 

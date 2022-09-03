@@ -1,3 +1,5 @@
+## This Module configures parameters being used in the EV3 printing project
+
 # return arms to initial position settings:
 returnHomeSpeed = 500
 returnHomeTime = 500
@@ -83,5 +85,31 @@ print_shapes = {'Circle': {'object_name': 'Circle',
                                                 'command_tupple': (0)},
                                 '4': {'command': 'both',
                                                 'command_tupple': (300, 300, 4)}
+                                                
+                                                }},
+                'House': {'object_name': 'House',
+                               'orders': {
+                                '1': {'command': 'up',
+                                                'command_tupple': (0)},
+                                '2': {'command': 'both',
+                                                'command_tupple': (200, 200, 4)},
+                                '3': {'command': 'down',
+                                                'command_tupple': (0)},
+                                '4': {'command': 'both',
+                                                'command_tupple': (0, 300, 4)},
+                                '5': {'command': 'both',
+                                                'command_tupple': (300, 0, 4)},
+                                '6': {'command': 'both',
+                                                'command_tupple': (150, -150, 4)},  # make triangle on top of house
+                                '7': {'command': 'both',
+                                                'command_tupple': (-150, 150, 4)},  # make triangle on top of house
+                                '8': {'command': 'both',
+                                                'command_tupple': (0, -300, 4)},
+                                '9': {'command': 'both',
+                                                'command_tupple': (150, 150, 4)}, # make triangle on top of house
+                                '10': {'command': 'both',
+                                                'command_tupple': (-150, -150, 4)}, # make triangle on top of house
+                                '11': {'command': 'both',
+                                                'command_tupple': (-300, 0, 4)}
                                                 
                                                 }}}
