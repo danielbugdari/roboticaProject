@@ -66,6 +66,7 @@ class PrintingRobot():
         # while abs(self.motorUpDown.speed()) > 5:
         #     time.sleep(0.001)
         # self.motorUpDown.stop()
+        myRobot.ev3.speaker.say('Reset Arms Position')
         self.pen_up()
 
         # reset two big motors:
@@ -243,11 +244,11 @@ class PrintingRobot():
             command_tupple = command['command_tupple']
 
             if this_command == 'both':
-                self.motorRight.run(command_tupple[0])
+                self.motorRight.run((-1)*command_tupple[0])
                 self.motorLeft.run(command_tupple[1])
                 time.sleep(command_tupple[2])
             elif this_command == 'right':
-                self.motorRight.run(command_tupple[0])
+                self.motorRight.run((-1)*command_tupple[0])
                 time.sleep(command_tupple[1])
             elif this_command == 'left':
                 self.motorLeft.run(command_tupple[0])
@@ -261,6 +262,44 @@ class PrintingRobot():
             self.motorLeft.stop()
         
         
+    def clicks_controller(self):
+        """
+        This function gets input from EV3 touchSensor to decide what command to execute
+        """
+        # self.stopRight
+        def execute(number_of_clicks):
+            """
+            This function executes printing according to amount of pressing on the touchSensor
+            """
+            if number_of_clicks == 0:
+                return False
+            if number_of_clicks == 1:
+                self.print(configuration.print_shapes['Line'])
+            elif number_of_clicks == 4:
+                self.print(configuration.print_shapes['Rectangle'])
+            return True
+
+        running = True  # run flag
+        clicks = 0  # clicks counter to determine action
+        end_timeout_seconds = 5 # seconds
+        proccess_time = 2 # seconds
+        start_time = time.time()  # time in seconds
+
+        while running:
+            if time.time() - start_time > proccess_time:  # make decision after 2 seconds
+                execute(clicks)
+                clicks = 0  # reset clicks counter every 2 seconds
+
+            if self.stopRight.pressed():
+                start_time = time.time()  # time in seconds
+                clicks += 1  # add click counter
+                while self.stopRight.pressed():  # for case of long pressing
+                    pass
+                end_time = time.time()
+                
+                if (end_time - start_time) > end_timeout_seconds:
+                    running = False
+                    clicks = 0
 
 
 
@@ -268,12 +307,15 @@ if __name__ == "__main__":
     print("main")
     myRobot = PrintingRobot()  # init robot class
     myRobot.ev3.speaker.say('Started Printing Robot Program')
-    myRobot.reset_motor_position()  # reset position
+    # myRobot.reset_motor_position()  # reset position
 
     # myRobot.move_two_motors()
     # myRobot.camera1()
     # myRobot.test()
-    myRobot.print(configuration.print_shapes['Rectangle'])
+    # myRobot.print(configuration.print_shapes['Triangle'])
+    # myRobot.reset_motor_position()  # reset position
+    myRobot.clicks_controller()
+    # myRobot.print(configuration.print_shapes['Rectangle'])
     #####
     # arrLeft = [[configuration.movingSpeed, configuration.runTime], [200, 1000]]
     # arrRight = [[-configuration.movingSpeed, configuration.runTime], [500, 2000]]
