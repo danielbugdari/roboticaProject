@@ -19,12 +19,16 @@ class PrintingRobot():
         # self.camera.write(0x41, 'B')
         # self.camera =   Ev3devSensor(Port.S3)
         
+        # Outputs
         self.motorLeft = Motor(Port.C)
         self.motorRight = Motor(Port.A)
         self.motorUpDown = Motor(Port.B)
 
+        # Inputs
+        self.button = TouchSensor(Port.S2)
         self.stopRight = TouchSensor(Port.S1)
         self.stopLeft = TouchSensor(Port.S4)
+        self.camera =   Ev3devSensor(Port.S3)
 
 
     def reset_motor_position(self):
@@ -34,7 +38,7 @@ class PrintingRobot():
         # while abs(self.motorUpDown.speed()) > 5:
         #     time.sleep(0.001)
         # self.motorUpDown.stop()
-        myRobot.ev3.speaker.say('Reset Arms Position')
+        # myRobot.ev3.speaker.say('Reset Arms Position')
         self.pen_up()
 
         # reset two big motors:
@@ -65,10 +69,10 @@ class PrintingRobot():
 
 
     def pen_up(self):
-        self.motorUpDown.run_time(speed=500, time=350)
+        self.motorUpDown.run_time(speed=450, time=350)
 
     def pen_down(self):
-        self.motorUpDown.run_time(speed=-500, time=300)
+        self.motorUpDown.run_time(speed=-450, time=300)
 
     def move_two_motors(self):
         roboticValue = DriveBase(left_motor=self.motorLeft, right_motor=self.motorRight, wheel_diameter=1,axle_track=110)
@@ -79,13 +83,42 @@ class PrintingRobot():
         roboticValue.reset()
         
         
-    # def camera1(self):
-    #     while True:
-    #     # self.camera =  I2CDevice(Port.S2, 0x02 >> 1)
-    #     # self.camera.write(0x41, 'B')
-    #         a = self.camera.read('TRACK')
-    #         print(a)
-    #         time.sleep(1)
+    def camera_controller(self):
+        """
+        This function sends print command according to color sample from the camera
+        """
+        def execute(color):
+            """
+            This function executes the print command according to given color id
+            """
+            if color == 1: # red
+                print("print red - print Rectangle")
+                self.print(configuration.print_shapes['Rectangle'])
+            elif color == 2: # blue
+                print("print Blue - print Triangle")
+                self.print(configuration.print_shapes['Triangle'])
+            elif color == 4: # green
+                print("print green - print House")
+                self.print(configuration.print_shapes['House'])
+            self.reset_motor_position()
+            
+
+        running = True
+        while running:
+            if self.button.pressed():
+                print("Button was pressed")
+                start_time = time.time()
+                while self.button.pressed():
+                    color = (self.camera.read('TRACK'))[1]  # take only the color argument
+                print("color is {}".format(color))
+                end_time = time.time()
+
+                if (end_time - start_time) > 5: # Turn off
+                    print("Turn off")
+                    running = False
+                else:  # execute printing
+                    print("execute printing by color")
+                    execute(color)
 
 
     def print(self, print_order):
@@ -109,7 +142,7 @@ class PrintingRobot():
                         etc...
                         }
         """
-        self.ev3.speaker.say(print_order['object_name'])
+        # self.ev3.speaker.say(print_order['object_name'])
         keys = list(print_order['orders'].keys())
         for order in range(len(keys)):  # run over all commands
             command = print_order['orders']['{}'.format(order+1)]
@@ -134,7 +167,51 @@ class PrintingRobot():
             self.motorRight.stop()
             self.motorLeft.stop()
         
-        
+    def set_mode(self):
+        """
+        This function sets the input mode of the robot - Clicks or Color Sensor
+        """
+        print("inside set_mode")
+        def execute(number_of_clicks):
+            """
+            This function executes printing according to amount of pressing on the touchSensor
+            """
+            print("inside set_mode -> execute {} clicks".format(number_of_clicks))
+            if number_of_clicks == 0:
+                return False
+            if number_of_clicks == 1:
+                print("camera mode")
+                self.camera_controller()
+            elif number_of_clicks == 2:
+                print("click mode")
+                self.clicks_controller()
+            return True
+
+        running = True  # run flag
+        clicks = 0  # clicks counter to determine action
+        end_timeout_seconds = 5 # seconds
+        proccess_time = 2 # seconds
+        start_time = time.time()  # time in seconds
+
+        while running:
+            if time.time() - start_time > proccess_time:  # make decision after 2 seconds
+                execute(clicks)
+                clicks = 0  # reset clicks counter every 2 seconds
+
+            if self.button.pressed():
+                start_time = time.time()  # time in seconds
+                clicks += 1  # add click counter
+                while self.button.pressed():  # for case of long pressing
+                    print("button is pressed")
+                    pass
+                end_time = time.time()
+                
+                if (end_time - start_time) > end_timeout_seconds:
+                    print("turning off")
+                    running = False
+                    clicks = 0
+
+
     def clicks_controller(self):
         """
         This function gets input from EV3 touchSensor to decide what command to execute
@@ -148,8 +225,14 @@ class PrintingRobot():
                 return False
             if number_of_clicks == 1:
                 self.print(configuration.print_shapes['Line'])
+            if number_of_clicks == 2:
+                self.print(configuration.print_shapes['2 Lines'])
+            if number_of_clicks == 3:
+                self.print(configuration.print_shapes['Triangle'])
             elif number_of_clicks == 4:
                 self.print(configuration.print_shapes['Rectangle'])
+            if number_of_clicks == 5:
+                self.print(configuration.print_shapes['House'])
             return True
 
         running = True  # run flag
@@ -179,15 +262,17 @@ class PrintingRobot():
 if __name__ == "__main__":
     print("main")
     myRobot = PrintingRobot()  # init robot class
-    myRobot.ev3.speaker.say('Started Printing Robot Program')
-    myRobot.reset_motor_position()  # reset position
+    myRobot.reset_motor_position()
+    myRobot.set_mode()  # running the functionality of the robot
+    # myRobot.camera_controller()
+    # myRobot.ev3.speaker.say('Started Printing Robot Program')
 
     # myRobot.move_two_motors()
     # myRobot.camera1()
     # myRobot.print(configuration.print_shapes['Triangle'])
     # myRobot.reset_motor_position()  # reset position
     # myRobot.clicks_controller()
-    myRobot.print(configuration.print_shapes['House'])
+    #myRobot.print(configuration.print_shapes['House'])
     #####
     # arrLeft = [[configuration.movingSpeed, configuration.runTime], [200, 1000]]
     # arrRight = [[-configuration.movingSpeed, configuration.runTime], [500, 2000]]
@@ -196,6 +281,6 @@ if __name__ == "__main__":
     
     #####
     myRobot.reset_motor_position()
-    myRobot.ev3.speaker.say('Finished Printing Robot Program')
-    myRobot.ev3.speaker.say('Sapir Daniel and Dan Made me')
+    # myRobot.ev3.speaker.say('Finished Printing Robot Program')
+    # myRobot.ev3.speaker.say('Sapir Daniel and Dan Made me')
 

@@ -26,7 +26,7 @@ runTime = 2000
 #                                     down - call pen_down function},
 #             etc...
 #             }
-print_shapes = {'Circle': {'object_name': 'Circle',
+print_shapes = {'Circle': {'object_name': '2 Lines',
                                'orders': {
                                 '1': {'command': 'both',
                                                 'command_tupple': (200, 200, 2)},
@@ -36,10 +36,12 @@ print_shapes = {'Circle': {'object_name': 'Circle',
                                     'command_tupple': (0)},
                                 '4': {'command': 'left',
                                     'command_tupple': (200, 3)},
-                                '5': {'command': 'right',
-                                    'command_tupple': (200, 2)},
-                                '6': {'command': 'both',
-                                    'command_tupple': (200, 200, 2)}
+                                '5': {'command': 'left',
+                                    'command_tupple': (-200, 3)},
+                                '6': {'command': 'right',
+                                    'command_tupple': (200, 3)},
+                                '7': {'command': 'right',
+                                    'command_tupple': (-200, 3)},
                                                 }},
                 'Rectangle': {'object_name': 'Rectangle',
                                'orders': {
