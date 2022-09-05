@@ -223,18 +223,25 @@ class PrintingRobot():
             """
             if number_of_clicks == 0:
                 return False
-            if number_of_clicks == 1:
+            elif number_of_clicks == 1:
+                print("1 clicks - Line")
                 self.print(configuration.print_shapes['Line'])
-            if number_of_clicks == 2:
-                self.print(configuration.print_shapes['2 Lines'])
-            if number_of_clicks == 3:
+            elif number_of_clicks == 2:
+                self.print(configuration.print_shapes['2_Lines'])
+                print("2 clicks - 2 Line")
+            elif number_of_clicks == 3:
                 self.print(configuration.print_shapes['Triangle'])
+                print("3 clicks - Triangle")
             elif number_of_clicks == 4:
                 self.print(configuration.print_shapes['Rectangle'])
-            if number_of_clicks == 5:
+                print("4 clicks - Rectangle")
+            elif number_of_clicks == 5:
                 self.print(configuration.print_shapes['House'])
+                print("5 clicks - House")
+            self.reset_motor_position()
             return True
 
+        print("Inside clicks moode")
         running = True  # run flag
         clicks = 0  # clicks counter to determine action
         end_timeout_seconds = 5 # seconds
@@ -246,10 +253,12 @@ class PrintingRobot():
                 execute(clicks)
                 clicks = 0  # reset clicks counter every 2 seconds
 
-            if self.stopRight.pressed():
+            if self.button.pressed():
+                print("btn is prsd")
                 start_time = time.time()  # time in seconds
                 clicks += 1  # add click counter
-                while self.stopRight.pressed():  # for case of long pressing
+                while self.button.pressed():  # for case of long pressing
+                    print("prsd down")
                     pass
                 end_time = time.time()
                 

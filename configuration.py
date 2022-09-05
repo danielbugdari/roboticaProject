@@ -26,7 +26,7 @@ runTime = 2000
 #                                     down - call pen_down function},
 #             etc...
 #             }
-print_shapes = {'Circle': {'object_name': '2 Lines',
+print_shapes = {'2_Lines': {'object_name': '2_Lines',
                                'orders': {
                                 '1': {'command': 'both',
                                                 'command_tupple': (200, 200, 2)},
