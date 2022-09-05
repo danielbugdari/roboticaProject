@@ -103,15 +103,23 @@ print_shapes = {'Circle': {'object_name': '2 Lines',
                                                 'command_tupple': (300, 0, 4)},
                                 '6': {'command': 'both',
                                                 'command_tupple': (150, -150, 4)},  # make triangle on top of house
-                                '7': {'command': 'both',
-                                                'command_tupple': (-150, 150, 4)},  # make triangle on top of house
+                                '7': {'command': 'up',
+                                                'command_tupple': (0)},
                                 '8': {'command': 'both',
-                                                'command_tupple': (0, -300, 4)},
-                                '9': {'command': 'both',
-                                                'command_tupple': (150, 150, 4)}, # make triangle on top of house
+                                                'command_tupple': (-150, 150, 4)},  # make triangle on top of house
+                                '9': {'command': 'down',
+                                                'command_tupple': (0)},
                                 '10': {'command': 'both',
-                                                'command_tupple': (-150, -150, 4)}, # make triangle on top of house
+                                                'command_tupple': (0, -300, 4)},
                                 '11': {'command': 'both',
+                                                'command_tupple': (150, 150, 4)}, # make triangle on top of house
+                                '12': {'command': 'up',
+                                                'command_tupple': (0)},
+                                '13': {'command': 'both',
+                                                'command_tupple': (-150, -150, 4)}, # make triangle on top of house
+                                '14': {'command': 'down',
+                                                'command_tupple': (0)},
+                                '15': {'command': 'both',
                                                 'command_tupple': (-300, 0, 4)}
                                                 
                                                 }}}
